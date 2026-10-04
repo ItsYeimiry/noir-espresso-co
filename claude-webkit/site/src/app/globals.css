@@ -1,0 +1,283 @@
+@import "tailwindcss";
+
+/*
+  Design tokens. Neutrals are tinted toward coffee brown (hue ~55) so nothing is pure black or white.
+  One accent only (verdigris), used for focus, active state and small marks.
+  Dark is the default theme; light is opt-in through [data-theme="light"].
+*/
+:root {
+  color-scheme: dark;
+  --bg: oklch(0.155 0.012 55);
+  --surface: oklch(0.2 0.014 55);
+  --surface-2: oklch(0.245 0.016 55);
+  --fg: oklch(0.95 0.012 80);
+  --muted: oklch(0.74 0.02 75);
+  --line: oklch(1 0 0 / 0.11);
+  --accent: oklch(0.8 0.1 165);
+  --on-accent: oklch(0.2 0.03 165);
+  --on-media: oklch(0.975 0.01 80);
+  --scrim: oklch(0.12 0.012 55 / 0.78);
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
+  --gutter: clamp(1.25rem, 0.5rem + 3vw, 4rem);
+  --nav-h: 3.25rem;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: oklch(0.972 0.008 80);
+  --surface: oklch(0.94 0.012 78);
+  --surface-2: oklch(0.91 0.015 76);
+  --fg: oklch(0.2 0.02 55);
+  --muted: oklch(0.46 0.025 60);
+  --line: oklch(0.2 0.02 55 / 0.14);
+  --accent: oklch(0.42 0.09 165);
+  --on-accent: oklch(0.975 0.01 80);
+  --scrim: oklch(0.972 0.008 80 / 0.82);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --color-on-media: var(--on-media);
+  --font-display: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+
+  --text-display: clamp(2.9rem, 1.1rem + 7.4vw, 8.5rem);
+  --text-h2: clamp(2.1rem, 1rem + 4vw, 5rem);
+  --text-h3: clamp(1.5rem, 1.1rem + 1.4vw, 2.4rem);
+  --text-lead: clamp(1.05rem, 0.95rem + 0.5vw, 1.35rem);
+}
+
+html {
+  scroll-behavior: auto;
+  -webkit-text-size-adjust: 100%;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+img {
+  user-select: none;
+}
+
+@layer components {
+  /* Large headings: tight tracking and leading, as Apple and Linear set display type. */
+  .display {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.045em;
+    line-height: 0.96;
+    text-wrap: balance;
+  }
+  .h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--text-h2);
+    letter-spacing: -0.04em;
+    line-height: 1;
+    text-wrap: balance;
+  }
+  .eyebrow {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Text link with a travelling arrow. The arrow is the only hover signal, no underline noise. */
+  .link-arrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 160ms ease;
+  }
+  .link-arrow svg {
+    transition: transform 220ms var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .link-arrow:hover svg {
+      transform: translateX(3px);
+    }
+  }
+  .link-arrow:active {
+    transform: scale(0.98);
+  }
+}
+
+/* Reveal on scroll. Only hidden when JS is running, so the page is complete without it. */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 700ms var(--ease-out),
+    transform 700ms var(--ease-out);
+  transition-delay: calc(var(--d, 0) * 70ms);
+}
+.js .reveal[data-in="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Hero headline: each word rises out of a mask, once, on load. */
+.mask-line {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+.js .mask-line > span {
+  display: inline-block;
+  transform: translateY(112%);
+  animation: rise 1000ms var(--ease-out) forwards;
+  animation-delay: calc(var(--i, 0) * 70ms + 120ms);
+}
+@keyframes rise {
+  to {
+    transform: translateY(0);
+  }
+}
+
+.js .fade-up {
+  opacity: 0;
+  transform: translateY(14px);
+  animation: fade-up 900ms var(--ease-out) forwards;
+  animation-delay: calc(var(--i, 0) * 90ms + 500ms);
+}
+@keyframes fade-up {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Dialog: modals stay centered; on small screens they become a bottom sheet. */
+.dialog-overlay[data-state="open"] {
+  animation: fade-in 200ms var(--ease-out);
+}
+.dialog-overlay[data-state="closed"] {
+  animation: fade-out 150ms var(--ease-out) forwards;
+}
+.dialog-content[data-state="open"] {
+  animation: sheet-in 340ms var(--ease-drawer);
+}
+.dialog-content[data-state="closed"] {
+  animation: sheet-out 200ms var(--ease-drawer) forwards;
+}
+@media (min-width: 48rem) {
+  .dialog-content[data-state="open"] {
+    animation: modal-in 240ms var(--ease-out);
+  }
+  .dialog-content[data-state="closed"] {
+    animation: modal-out 160ms var(--ease-out) forwards;
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes sheet-in {
+  from {
+    transform: translateY(100%);
+  }
+}
+@keyframes sheet-out {
+  to {
+    transform: translateY(100%);
+  }
+}
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
+  }
+}
+@keyframes modal-out {
+  to {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.97);
+  }
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal,
+  .js .mask-line > span,
+  .js .fade-up {
+    transform: none;
+    transition: opacity 250ms ease;
+    animation: none;
+    opacity: 1;
+  }
+  .dialog-content[data-state],
+  .dialog-overlay[data-state] {
+    animation-duration: 1ms !important;
+  }
+  * {
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Theme toggle icons follow the html attribute, so there is no icon flash. */
+:root[data-theme="light"] .icon-moon,
+:root:not([data-theme="light"]) .icon-sun {
+  display: none;
+}

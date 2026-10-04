@@ -1,3 +1,7 @@
+> **SUPERSEDED.** The implemented design system lives in `claude-webkit/site/src/app/globals.css`
+> (OKLCH tokens, verdigris accent, Bricolage Grotesque + Hanken Grotesk). The palette and fonts below
+> are the earlier generated proposal (black + gold, Cormorant + Montserrat) and are kept for reference only.
+
 # Design System Master File
 
 > **LOGIC:** When building a specific page, first check `design-system/pages/[page-name].md`.
