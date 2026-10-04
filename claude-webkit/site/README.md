@@ -12,6 +12,10 @@ npm run export     # HTML estático en out/ (sin servidor Node)
 npm run images     # regenera las imágenes de demo
 ```
 
+### Ver la versión estática con doble clic
+
+`noir-espresso-co-static.zip` incluye `ABRIR-WEB-WINDOWS.bat` y `ABRIR-WEB-MAC.command`, que levantan un servidor local y abren el navegador (los fuentes están en `scripts/launchers/`). Abrir `index.html` directamente no funciona porque la web usa rutas absolutas.
+
 ## Personalizar para un cliente
 
 Todo el contenido está en **`src/content.config.ts`**:

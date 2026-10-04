@@ -1,0 +1,16 @@
+NOIR ESPRESSO CO. - COMO VER LA WEB EN TU COMPUTADOR
+
+1) Descomprime esta carpeta completa (no abras los archivos desde dentro del zip).
+
+2) Haz doble clic en:
+   - Windows: ABRIR-WEB-WINDOWS.bat
+   - Mac:     ABRIR-WEB-MAC.command
+
+   Se abrira tu navegador con la web. Deja la ventana negra abierta mientras la ves.
+   Para cerrarla, cierra esa ventana.
+
+   Ingles: anade /en a la direccion (http://localhost:8080/en)
+
+Si Windows dice "Windows protegio su PC": pulsa "Mas informacion" y luego "Ejecutar de todas formas".
+Si Mac dice que no se puede abrir: clic derecho sobre el archivo, "Abrir", y confirma.
+No hagas doble clic en index.html: el navegador lo muestra sin estilos.
